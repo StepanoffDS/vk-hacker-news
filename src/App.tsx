@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router'
+import { Panel, Root, View, SplitCol, SplitLayout } from '@vkontakte/vkui'
+import React from 'react'
+import Home from './components/Home/Home'
+import Story from './components/Story/Story'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { view: activeView, panel: activePanel } = useActiveVkuiLocation()
+
+	return (
+		<SplitLayout style={{ justifyContent: 'center' }}>
+			<SplitCol width='100%' maxWidth='1024px' stretchedOnMobile autoSpaced>
+				<Root activeView={activeView as string}>
+					<View nav='default_view' activePanel={activePanel as string}>
+						<Panel nav='home'>
+							<Home />
+						</Panel>
+						<Panel nav='story'>
+							<Story />
+						</Panel>
+					</View>
+				</Root>
+			</SplitCol>
+		</SplitLayout>
+	)
 }
 
-export default App;
+export default App
