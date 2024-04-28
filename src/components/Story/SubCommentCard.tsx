@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getStory } from '../../api'
 import { TStory } from './TStory'
 import { ContentCard } from '@vkontakte/vkui'
@@ -18,7 +18,6 @@ export default function SubCommentCard({
 	return (
 		<ContentCard
 			mode='tint'
-			caption={subComment?.id}
 			header={subComment?.by}
 			text={convertTextToHtml(subComment?.text || '')}
 		/>

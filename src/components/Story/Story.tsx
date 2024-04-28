@@ -1,17 +1,8 @@
-import { useParams } from '@vkontakte/vk-mini-apps-router'
+import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router'
 import { useEffect, useState } from 'react'
-import { getStory, getStoryIds } from '../../api'
+import { getStory } from '../../api'
 import { TStory } from './TStory'
-import {
-	Button,
-	Card,
-	CardGrid,
-	ContentCard,
-	Group,
-	Link,
-	Text,
-	Title,
-} from '@vkontakte/vkui'
+import { Button, CardGrid, Group, Link, Text, Title } from '@vkontakte/vkui'
 import CommentCard from './CommentCard'
 import { mapTime } from '../../utils/mapTime'
 
@@ -19,6 +10,8 @@ export default function Story() {
 	const params = useParams<'id'>()
 	const paramId = Number(params?.id) || 0
 	const [story, setStory] = useState<TStory>()
+
+	const routeNavigator = useRouteNavigator()
 
 	function updateStory() {
 		getStory(paramId).then((data) => data && data.url && setStory(data))
@@ -28,11 +21,14 @@ export default function Story() {
 		updateStory()
 	}, [])
 
-	console.log(story)
-
 	return (
 		<Group>
-			<p>{story?.id}</p>
+			<Button
+				style={{ marginBottom: '1rem' }}
+				onClick={() => routeNavigator.back()}
+			>
+				Back
+			</Button>
 			<Title style={{ marginBottom: '1rem' }}>{story?.title}</Title>
 			<Text style={{ marginBottom: '0.8rem' }}>
 				Link:{' '}
@@ -50,11 +46,15 @@ export default function Story() {
 			<Text style={{ marginBottom: '0.8rem' }}>
 				COMMENTS ({story?.kids?.length || 0}){' '}
 			</Text>
-			<CardGrid size='l'>
-				{story?.kids?.map((id) => (
-					<CommentCard key={id} commentId={id} />
-				))}
-			</CardGrid>
+			{story?.kids && story.kids.length > 0 ? (
+				<CardGrid size='l'>
+					{story?.kids?.map((id) => (
+						<CommentCard key={id} commentId={id} />
+					))}
+				</CardGrid>
+			) : (
+				<Text>No comments</Text>
+			)}
 		</Group>
 	)
 }

@@ -12,9 +12,9 @@ export default function Home() {
 
 	useEffect(() => {
 		storiesIdsUpdate()
-		// setInterval(() => {
-		// 	storiesIdsUpdate()
-		// }, 60000)
+		setInterval(() => {
+			storiesIdsUpdate()
+		}, 60000)
 	}, [])
 
 	return (
