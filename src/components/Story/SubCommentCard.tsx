@@ -19,7 +19,11 @@ export default function SubCommentCard({
 		<ContentCard
 			mode='tint'
 			header={subComment?.by}
-			text={convertTextToHtml(subComment?.text || '')}
+			text={
+				subComment?.deleted
+					? 'Comment deleted'
+					: convertTextToHtml(subComment?.text || '')
+			}
 		/>
 	)
 }

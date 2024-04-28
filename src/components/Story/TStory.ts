@@ -9,4 +9,5 @@ export type TStory = {
 	url?: string
 	kids?: number[]
 	text?: string
+	deleted?: boolean
 }

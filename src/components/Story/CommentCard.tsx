@@ -17,7 +17,11 @@ export default function CommentCard({ commentId }: { commentId: number }) {
 		<>
 			<ContentCard
 				header={comment?.by}
-				text={convertTextToHtml(comment?.text || '')}
+				text={
+					comment?.deleted
+						? 'Comment deleted'
+						: convertTextToHtml(comment?.text || '')
+				}
 			/>
 
 			{comment?.kids && comment.kids.length > 0 && (
