@@ -1,35 +1,60 @@
 import { useParams } from '@vkontakte/vk-mini-apps-router'
 import { useEffect, useState } from 'react'
-import { getStory } from '../../api'
+import { getStory, getStoryIds } from '../../api'
+import { TStory } from './TStory'
+import {
+	Button,
+	Card,
+	CardGrid,
+	ContentCard,
+	Group,
+	Link,
+	Text,
+	Title,
+} from '@vkontakte/vkui'
+import CommentCard from './CommentCard'
+import { mapTime } from '../../utils/mapTime'
 
 export default function Story() {
 	const params = useParams<'id'>()
 	const paramId = Number(params?.id) || 0
+	const [story, setStory] = useState<TStory>()
 
-	type TStory = {
-		by: string
-		descendants: number
-		id: number
-		score: number
-		time: number
-		title: string
-		type: string
-		url: string
-		kids?: number[]
+	function updateStory() {
+		getStory(paramId).then((data) => data && data.url && setStory(data))
 	}
 
-	const [story, setStory] = useState<TStory>()
 	useEffect(() => {
-		getStory(paramId).then((data) => data && data.url && setStory(data))
-	}, [paramId])
+		updateStory()
+	}, [])
+
+	console.log(story)
 
 	return (
-		<div>
-			<p>{story?.title}</p>
-			<p>{story?.url}</p>
-			<p>{story?.time}</p>
-			<p>{story?.by}</p>
-			<p>{story?.kids?.length || 0}</p>
-		</div>
+		<Group>
+			<p>{story?.id}</p>
+			<Title style={{ marginBottom: '1rem' }}>{story?.title}</Title>
+			<Text style={{ marginBottom: '0.8rem' }}>
+				Link:{' '}
+				<Link href={story?.url} target='_blank'>
+					{story?.url}
+				</Link>
+			</Text>
+			<Text style={{ marginBottom: '0.8rem' }}>
+				{mapTime(story?.time ?? 0)} ago
+			</Text>
+			<Text style={{ marginBottom: '0.8rem' }}>Author: {story?.by}</Text>
+			<Button style={{ marginBottom: '0.8rem' }} onClick={() => updateStory()}>
+				Update Comments
+			</Button>
+			<Text style={{ marginBottom: '0.8rem' }}>
+				COMMENTS ({story?.kids?.length || 0}){' '}
+			</Text>
+			<CardGrid size='l'>
+				{story?.kids?.map((id) => (
+					<CommentCard key={id} commentId={id} />
+				))}
+			</CardGrid>
+		</Group>
 	)
 }

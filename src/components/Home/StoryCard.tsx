@@ -3,18 +3,7 @@ import { getStory } from '../../api'
 import { Card, Subhead, Title, Button, Text } from '@vkontakte/vkui'
 import { RouterLink, useRouteNavigator } from '@vkontakte/vk-mini-apps-router'
 import { mapTime } from '../../utils/mapTime'
-
-type TStory = {
-	by: string
-	descendants: number
-	id: number
-	score: number
-	time: number
-	title: string
-	type: string
-	url: string
-	kids?: number[]
-}
+import { TStory } from '../Story/TStory'
 
 export default function StoryCard({ storyId }: { storyId: number }) {
 	const [story, setStory] = useState<TStory>()
